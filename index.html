@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Not Down Yes Up</title>
+		<meta name="viewport" content="width=device-width">
+		<link rel="shortcut icon" href="/favicon.ico">
+		<link rel="stylesheet" href="fonts/style.css">
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/styles.css">
+	</head>
+	<body>
+		<navigation id="menu">
+			<nav class="navbar navbar-default" role="navigation">
+				<div id="dragBarTop">
+					<button type="button" class="btnClose btnWindowControl"  id="closeWindow">
+						<span title="Cerrar Ventana" class="icon-close-window"></span>
+					</button>
+					<button type="button" class="btnMaximize btnWindowControl"  id="maximizeWindow">
+						<span title="Maximizar Ventana" class="icon-maximize-window"></span>
+					</button>
+					<button type="button" class="btnMinimize btnWindowControl"  id="minimizeWindow">
+						<span title="Minimizar Ventana" class="icon-minimize-window"></span>
+					</button>
+				</div>
+				<div class="container-fluid nav-custom">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="#">
+							<img class="logo" src="img/logo.png">
+						</a>
+					</div>
+
+					<div class="collapse navbar-collapse" id="navegationBar">
+						<ul class="nav navbar-nav navbar-right">
+							<li class="navbar-brand" title="Conexion a Internet">
+								<span class="icon-connection-internet"></span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</navigation>
+
+		<div id="containerAuthenticate" class="container">
+			<div class="row col-md-6 col-xs-6 col-xs-offset-3 col-md-offset-3">
+				<form id="formAuthenticate">
+				<div class="form-group">
+					<label for="username">Usuario</label>
+					<input type="text" class="form-control" name="username" id="username" placeholder="Usuario">
+				</div>
+				<div class="form-group">
+					<label for="password">Contraseña</label>
+					<input type="password" class="form-control" name="password" id="password" placeholder="Contraseña">
+				</div>
+
+				<button type="submit" class="btn btn-success">Autenticarse</button>
+				</form>
+			</div>
+		</div>
+
+		<div id="containerConfigRug" class="container hidden">
+			<button id="logout" class="btn btn-danger">Cerrar Sesión</button>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="text-center">
+						<p title="Estado Conexion Tapete" class="icon-connection-board" id="led"></p>
+						<br/>
+						<section>
+							<div class="form-group">
+								<label for="pinCorrect" for="sel1">Pin:</label>
+								<select name="pinCorrect" id="pinCorrect" size="4" class="form-control" id="sel1">
+									<option selected value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+								</select>
+							</div>
+						<button type="button" class="btn btn-lg btn-success" id="btn-connect-board">Conectar</button>
+						<button type="button" class="btn btn-lg btn-danger" id="btn-disconnect-board">Desconectar</button>
+						</section>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="js/jquery.min.js"></script>
+		<script src="js/offline.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/main.js"></script>
+		<script src="js/app.js"></script>
+	</body>
+</html>

@@ -1,0 +1,62 @@
+colorBase = #FFC799
+colorBaseDark = #E83D0C
+
+colorGreen = #45C44F
+colorRed = #FF0000
+colorYellow = #E8AD0C
+
+body
+	background-image url('../img/background.png')
+
+#dragBarTop
+	-webkit-app-region drag
+	background-color colorBaseDark
+
+[class^="icon-"], [class*=" icon-"]
+	font-size 3rem
+
+.btnWindowControl
+	cursor pointer
+	-webkit-app-region no-drag
+	opacity 0.5
+	margin-right 4px
+	color #FFFFFF
+	-webkit-appearance none
+	padding 0
+	cursor pointer
+	background 0 0
+	border 0
+	font-size 1rem
+	&:hover
+		opacity 0.9
+
+.logo
+	width 30px
+
+button
+	outline none
+
+select
+	overflow hidden
+	text-align center
+
+.connecting
+	animation: 3s load infinite;
+
+.nav-custom
+	background colorBase
+
+.navbar-brand
+	padding 7px 15px
+
+.icon-connection-board
+	font-size 20em
+
+@keyframes load
+	0%
+		color colorGreen
+	25%
+		color colorRed
+	75%
+		color colorYellow
+

@@ -1,0 +1,28 @@
+{
+  "name": "not-down-yes-up-desktop",
+  "main": "index.html",
+  "version": "0.1.0",
+  "description": "Not Down, ¡Yes Up! Client Desktop",
+  "keywords": "",
+  "window": {
+    "title": "Not Down, ¡Yes Up! - Desktop",
+    "icon": "img/favicon.png",
+    "width": 900,
+    "height": 650,
+    "min_width": 900,
+    "min_height": 650,
+    "position": "center",
+    "resizable": false,
+    "toolbar": false,
+    "frame": false,
+    "fullscreen": false
+  },
+  "dependencies": {
+    "johnny-five": "^0.9.61",
+    "nw": "^0.15.4"
+  },
+  "scripts": {
+    "stylus": "stylus stylus/ -c -w -o css/",
+    "start": "node_modules/nw/bin/nw"
+  }
+}
