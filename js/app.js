@@ -23,10 +23,7 @@ var five = require('johnny-five'),
 	leds,
 	port = false,
 	buttons,
-	host = "http://192.168.0.6:8000/"
-
-//$("#btn-connect-board").attr("disabled",false)
-//$("#btn-disconnect-board").attr("disabled",false)
+	host = "http://192.168.0.4:8000/"
 
 var serialPort = require('johnny-five/node_modules/serialport');
 
@@ -82,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function pressButton(button) {
 	console.log("Pressed: ", button.pin)
+	buttons.removeListener("press",pressButton)
 	$.ajax({
 		url: host + "arduino/data",
 		data:{
@@ -92,6 +90,9 @@ function pressButton(button) {
 		success: function(result){
 			console.log(result)
 			if(result.isCorrect) return leds.toggle()
+			window.setTimeout(function(){
+				buttons.on("press",pressButton)
+			},6000)
 			//disconnectBoard()
 		}
 	})
@@ -119,12 +120,26 @@ function connectBoard(){
 		board.on('ready', function() {
 			$(".icon-connection-board").removeClass("connecting")
 			$(".icon-connection-board").css({color:colors.colorYellow})
-			leds = new five.Leds([8])
+
+			/*
+				Cable Naranja -> Pin 7: Boton 4
+					Leds -> Pin 8,9,10
+
+				Cable Azul -> Pin 6: Boton 3
+					Leds -> 6,7
+
+				Cable Verde -> Pin 4: Boton 2
+					Leds -> A0,A1
+
+				Cable Amarillo -> Pin 2: Boton 1
+					Leds -> 11,12,13
+			*/
+			leds = new five.Leds([6,7,8,9,10,11,12,13,"A0","A1"]);
 			buttons = new five.Buttons([
-				{pin:7,custom :{pin: 1}},
-				{pin:9,custom :{pin: 2}},
-				{pin:10,custom :{pin: 3}},
-				{pin:11,custom :{pin: 4}}
+				{pin:2,custom :{pin: 1}},
+				{pin:3,custom :{pin: 2}},
+				{pin:4,custom :{pin: 3}},
+				{pin:5,custom :{pin: 4}}
 			])
 
 			buttons.on("press", pressButton)
