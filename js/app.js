@@ -1,14 +1,11 @@
+var notification = new NotificationC(),
+	CTE = {}
+
 $.ajaxSetup({
 	headers: { "Desktop-App": "true" }
 });
 
 $("[title]").tooltip({placement:"bottom",delay: {show: 100, hide: 100}})
-
-CTE = {
-	CORRECT : 0,
-	INCORRECT : 1,
-	INFORMATION : 2
-}
 
 var colors = {
 	colorBase : '#FFC799',
@@ -23,7 +20,7 @@ var five = require('johnny-five'),
 	leds,
 	port = false,
 	buttons,
-	host = "http://192.168.0.4:8000/"
+	host = "http://192.168.0.7:8000/"
 
 var serialPort = require('johnny-five/node_modules/serialport');
 
@@ -61,9 +58,12 @@ document.addEventListener('DOMContentLoaded', function() {
 				contentType :"application/x-www-form-urlencoded",
 				data:$(this).serialize(),
 				error: function(err){
-					console.warn("Ha Ocurrido un Error al Conectarse con el Servidor")
+					notification.show({msg:"Ha Ocurrido un Error al Conectarse con el Servidor",type:1})
+					console.warn()
 				},
-				success: function(result){
+				success: function(response){
+					console.log(response)
+					CTE = response.CTE
 					$("#containerAuthenticate").addClass("hidden")
 					$("#containerConfigRug").removeClass("hidden")
 
@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function pressButton(button) {
 	console.log("Pressed: ", button.pin)
 	buttons.removeListener("press",pressButton)
+	$("#statusButtons").html("")
 	$.ajax({
 		url: host + "arduino/data",
 		data:{
@@ -89,11 +90,13 @@ function pressButton(button) {
 		type:"POST",
 		success: function(result){
 			console.log(result)
-			if(result.isCorrect) return leds.toggle()
-			window.setTimeout(function(){
-				buttons.on("press",pressButton)
-			},6000)
-			//disconnectBoard()
+
+			setTimeout(function(){
+				buttons.on("press", pressButton)
+				$("#statusButtons").html("Puedes Presionar el Boton")
+			},30000)
+
+			if(result.isCorrect) onOffLeds()
 		}
 	})
 }
@@ -141,8 +144,16 @@ function connectBoard(){
 				{pin:4,custom :{pin: 3}},
 				{pin:5,custom :{pin: 4}}
 			])
-
+			$("#statusButtons").html("Puedes Presionar el Boton")
 			buttons.on("press", pressButton)
+
+			onOffLeds()
+
+			this.on("exit", function() {
+				leds.off();
+				leds.stop();
+				buttons.removeListener("press",pressButton)
+			});
 		})
 
 		board.on('error', function(err) {
@@ -150,6 +161,10 @@ function connectBoard(){
 			$(".icon-connection-board").css({color:colors.colorRed})
 		})
 	})
+}
+function onOffLeds(){
+	leds.on()
+	setTimeout(function(){leds.off()},6000)
 }
 
 function disconnectBoard(){
@@ -159,4 +174,43 @@ function disconnectBoard(){
 		$(".icon-connection-board").css({color:colors.colorRed})
 		return {message: "Tapete Desconectado",statusCode: CTE.CORRECT}
 	})
+}
+
+function NotificationC (){
+	var contenedorPrincipal = document.body
+
+	var createMessage = function (data){
+		var contenedorMSG = document.createElement("article")
+		contenedorMSG.classList.add("contenedorMensaje")
+		var mensaje = document.createElement("p")
+		mensaje.innerHTML= data.msg
+		contenedorMSG.classList.add("MSG")
+		var icon = document.createElement("img")
+
+		contenedorMSG.appendChild(icon)
+		contenedorMSG.appendChild(mensaje)
+
+		if (data.type == 0) icon.src = "/img/notifications/correcto.png"
+		else if(data.type == 1) icon.src = "/img/notifications/incorrecto.png"
+		else if(data.type == 2) icon.src = "/img/notifications/informacion.png"
+
+		icon.classList.add("contenedorIcon")
+		mensaje.classList.add("contenedorMensaje")
+
+		return contenedorMSG
+	}
+
+	this.show = function (data){
+		var contenedorMSG = createMessage(data),
+			top = window.window.scrollY,
+			time = data.time || 3000
+
+		contenedorMSG.setAttribute("style", "top:" + top + "px")
+		contenedorPrincipal.appendChild(contenedorMSG)
+		setTimeout(this.hide.bind(this), time)
+	}
+
+	this.hide = function (){
+		contenedorPrincipal.removeChild(contenedorPrincipal.lastChild)
+	}
 }

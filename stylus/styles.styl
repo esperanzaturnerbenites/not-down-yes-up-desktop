@@ -5,6 +5,8 @@ colorGreen = #45C44F
 colorRed = #FF0000
 colorYellow = #E8AD0C
 
+@import "notifications.styl"
+
 body
 	background-image url('../img/background.png')
 
@@ -55,8 +57,9 @@ select
 @keyframes load
 	0%
 		color colorGreen
+	50%
+		color colorYellow
 	25%
-		color colorRed
+		color colorGreen
 	75%
 		color colorYellow
-
