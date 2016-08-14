@@ -20,7 +20,7 @@ var five = require('johnny-five'),
 	leds,
 	port = false,
 	buttons,
-	host = "http://192.168.0.7:8000/"
+	host = "http://192.168.0.4:8000/"
 
 var serialPort = require('johnny-five/node_modules/serialport');
 
