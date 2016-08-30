@@ -20,7 +20,7 @@ var five = require('johnny-five'),
 	leds,
 	port = false,
 	buttons,
-	host = "http://192.168.0.4:8000/"
+	host = "http://192.168.0.7:8000/"
 
 var serialPort = require('johnny-five/node_modules/serialport');
 
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			success: function(result){
 				$("#containerAuthenticate").removeClass("hidden")
 				$("#containerConfigRug").addClass("hidden")
-				$("#btn-connect-board").off("click",connectBoard)
+				$("#btn-connect-board").off("click",connectBoard).prop("disabled",false)
 				$("#btn-disconnect-board").off("click",disconnectBoard)
 			}
 		})
@@ -93,8 +93,8 @@ function pressButton(button) {
 
 			setTimeout(function(){
 				buttons.on("press", pressButton)
-				$("#statusButtons").html("Puedes Presionar el Boton")
-			},30000)
+				$("#statusButtons").html("Ya se puede presionar el botón.")
+			},15000)
 
 			if(result.isCorrect) onOffLeds()
 		}
@@ -102,6 +102,9 @@ function pressButton(button) {
 }
 
 function connectBoard(){
+	$("#btn-connect-board")
+		.off("click",connectBoard)
+		.prop("disabled",true)
 	$(".icon-connection-board").addClass("connecting")
 	if(port) return port.open()
 	serialPort.list(function (err, ports) {
@@ -162,6 +165,7 @@ function connectBoard(){
 		})
 	})
 }
+
 function onOffLeds(){
 	leds.on()
 	setTimeout(function(){leds.off()},6000)
