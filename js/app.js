@@ -22,7 +22,7 @@ var five = require('johnny-five'),
 	buttons,
 	host = "http://192.168.0.7:8000/"
 
-var serialPort = require('johnny-five/node_modules/serialport');
+//var serialPort = require('johnny-five/node_modules/serialport');
 
 document.addEventListener('DOMContentLoaded', function() {
 	$('#logout').click(function(){
@@ -85,7 +85,7 @@ function pressButton(button) {
 		url: host + "arduino/data",
 		data:{
 			pinPress: button.custom.pin,
-			pinCorrect: $("#pinCorrect").val()
+			//pinCorrect: $("#pinCorrect").val()
 		},
 		type:"POST",
 		success: function(result){
@@ -106,7 +106,7 @@ function connectBoard(){
 		.off("click",connectBoard)
 		.prop("disabled",true)
 	$(".icon-connection-board").addClass("connecting")
-	if(port) return port.open()
+	/*if(port) return port.open()
 	serialPort.list(function (err, ports) {
 
 		dataPort = ports.find(function(port) {return port.manufacturer == "Arduino__www.arduino.cc_"})
@@ -120,10 +120,13 @@ function connectBoard(){
 			buffersize: 1
 		})
 
-		//board = new five.Board({port: port})
-		board = new five.Board()
+
+	})*/
+			//board = new five.Board({port: port})
+		board = new five.Board({port: "COM4"})
 
 		board.on('ready', function() {
+
 			$(".icon-connection-board").removeClass("connecting")
 			$(".icon-connection-board").css({color:colors.colorYellow})
 
@@ -149,8 +152,8 @@ function connectBoard(){
 			])
 			$("#statusButtons").html("Puedes Presionar el Boton")
 			buttons.on("press", pressButton)
-
 			onOffLeds()
+			console.log("ready")
 
 			this.on("exit", function() {
 				leds.off();
@@ -160,10 +163,10 @@ function connectBoard(){
 		})
 
 		board.on('error', function(err) {
+			$(".icon-connection-board").removeClass("connecting")
 			console.log(err)
 			$(".icon-connection-board").css({color:colors.colorRed})
 		})
-	})
 }
 
 function onOffLeds(){
